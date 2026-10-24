@@ -3,23 +3,43 @@ import { StyleSheet, TouchableOpacity, Linking, Platform } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Colors } from '../constants/Colors';
 
+export const WHATSAPP_PHONE_NUMBER = '916303876698';
+
+export const WHATSAPP_GREETING_MESSAGE = `Thank you 😊 for interacting with Dr HARI PHYSIOTHERAPY & HOME  HEALTH CARE SERVICES 
+
+Please let us know how we can assist you.
+
+Please provide your details:- 
+
+Name :- 
+Address:-
+Services required ?  :- 
+For more information contact:- 6303876698`;
+
+export const openWhatsApp = (customMessage?: string) => {
+  const text = encodeURIComponent(customMessage || WHATSAPP_GREETING_MESSAGE);
+  const phoneNumber = WHATSAPP_PHONE_NUMBER;
+  const url = `whatsapp://send?phone=${phoneNumber}&text=${text}`;
+
+  if (Platform.OS === 'web') {
+    Linking.openURL(`https://wa.me/${phoneNumber}?text=${text}`);
+    return;
+  }
+
+  Linking.canOpenURL(url)
+    .then((supported) => {
+      if (!supported) {
+        return Linking.openURL(`https://wa.me/${phoneNumber}?text=${text}`);
+      } else {
+        return Linking.openURL(url);
+      }
+    })
+    .catch(() => Linking.openURL(`https://wa.me/${phoneNumber}?text=${text}`));
+};
+
 export const WhatsAppFAB = ({ message }: { message?: string }) => {
-  const defaultMessage = `Thank you 😊 for contacting Dr HARI PHYSIOTHERAPY AND HOME HEALTH CARE SERVICES\n\nPlease let us know how we can help you.\n\nPlease provide:-\nName:-\nAddress:-\nServices required?:-\n1. Doctor Appointments 🧑‍⚕️\n2. Physiotherapy 🦵💪\n3. Wound Care & Dressing 🩹\n4. Nursing Care Services 🧑‍💼\n5. Surgical Things 🩼🦽 (Braces, walkers) etc.\n6. Ambulance Services 🚑`;
-  
   const handlePress = () => {
-    const text = encodeURIComponent(message || defaultMessage);
-    const phoneNumber = '916303876698';
-    const url = `whatsapp://send?phone=${phoneNumber}&text=${text}`;
-    
-    Linking.canOpenURL(url)
-      .then((supported) => {
-        if (!supported) {
-          return Linking.openURL(`https://wa.me/${phoneNumber}?text=${text}`);
-        } else {
-          return Linking.openURL(url);
-        }
-      })
-      .catch((err) => console.error('An error occurred', err));
+    openWhatsApp(message);
   };
 
   return (

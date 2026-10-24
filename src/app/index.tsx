@@ -5,7 +5,7 @@ import { Colors } from '../constants/Colors';
 import { AppContent } from '../constants/AppContent';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Sidebar } from '../components/Sidebar';
-import { WhatsAppFAB } from '../components/WhatsAppFAB';
+import { WhatsAppFAB, openWhatsApp } from '../components/WhatsAppFAB';
 
 const AnimatedCounter = ({ endValue, suffix, isVisible }: { endValue: number, suffix: string, isVisible: boolean }) => {
   const [count, setCount] = useState(0);
@@ -353,7 +353,7 @@ export default function SinglePageDashboard() {
                   <FontAwesome5 name="clock" size={20} color={Colors.primary} />
                   <Text style={styles.contactText}>Working Hours: 24 Hours</Text>
                 </View>
-                <TouchableOpacity style={styles.whatsappButton} onPress={() => Linking.openURL('https://wa.me/916303876698')}>
+                <TouchableOpacity style={styles.whatsappButton} onPress={() => openWhatsApp()}>
                   <FontAwesome5 name="whatsapp" size={20} color={Colors.surface} />
                   <Text style={styles.whatsappButtonText}>Chat on WhatsApp</Text>
                 </TouchableOpacity>
@@ -379,8 +379,7 @@ export default function SinglePageDashboard() {
 
 const AppointmentForm = ({ onLayout }: { onLayout: any }) => {
   const handleBooking = () => {
-    const text = encodeURIComponent(`Thank you 😊 for contacting Dr HARI PHYSIOTHERAPY AND HOME HEALTH CARE SERVICES\n\nPlease let us know how we can help you.`);
-    Linking.openURL(`https://wa.me/916303876698?text=${text}`);
+    openWhatsApp();
   };
 
   return (
